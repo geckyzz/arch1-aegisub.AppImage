@@ -1,4 +1,5 @@
 *.AppImage
+aegisub-build
 
 # Prerequisites
 *.d
