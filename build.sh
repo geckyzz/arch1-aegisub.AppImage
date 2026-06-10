@@ -269,6 +269,11 @@ clone_source() {
     info "Patching libaegisub path token for AppImage support..."
     git -C "$SOURCE_DIR" checkout libaegisub/unix/path.cpp 2>/dev/null || true
     sed -i 's|if (data == "") data = home/".aegisub";|if (data != "") data = data.parent_path() / "share" / "aegisub"; if (data == "") data = home/".aegisub";|' "$SOURCE_DIR/libaegisub/unix/path.cpp"
+
+    # Patch tools/version.sh to output the dynamic SemVer build version
+    info "Patching tools/version.sh to use build version..."
+    git -C "$SOURCE_DIR" checkout tools/version.sh 2>/dev/null || true
+    sed -i 's|build_date="$(date|git_version_str="'"$VERSION"'"\nbuild_date="$(date|' "$SOURCE_DIR/tools/version.sh"
 }
 
 # =============================================================================
