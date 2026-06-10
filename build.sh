@@ -512,12 +512,26 @@ function update_rpc(subs, sel, act)
     local line_info = ""
     if subs and act then
         local active_line_obj = subs[act]
-        if active_line_obj then
+        if active_line_obj and active_line_obj.class == "dialogue" and not active_line_obj.comment then
+            local line_number = 0
+            for i = 1, act do
+                if subs[i].class == "dialogue" then
+                    line_number = line_number + 1
+                end
+            end
+            local format_time = function(ms)
+                local cs = math.floor((ms % 1000) / 10)
+                local s = math.floor(ms / 1000) % 60
+                local m = math.floor(ms / 60000) % 60
+                local h = math.floor(ms / 3600000)
+                return string.format("%d:%02d:%02d.%02d", h, m, s, cs)
+            end
+            local time_str = format_time(active_line_obj.start_time)
             local ok, start_frame = pcall(aegisub.frame_from_ms, active_line_obj.start_time)
             if ok and start_frame then
-                line_info = string.format("Line: %d | Frame: %d", act, start_frame)
+                line_info = string.format("Line: %d | %s | Frame: %d", line_number, time_str, start_frame)
             else
-                line_info = string.format("Line: %d", act)
+                line_info = string.format("Line: %d | %s", line_number, time_str)
             end
         end
     end
@@ -530,6 +544,7 @@ function update_rpc(subs, sel, act)
         smallImageKey = "",
     }
     discordRPC.updatePresence(presence)
+    return true
 end
 '''
 
@@ -538,6 +553,12 @@ patched = re.sub(
     opsec_safe_rpc.strip(),
     patched,
     flags=re.DOTALL
+)
+
+patched = re.sub(
+    r'aegisub\.register_macro\(\s*script_name\s*,\s*script_description\s*,\s*update_rpc\s*\)',
+    r'aegisub.register_macro(script_name, script_description, update_rpc, update_rpc)',
+    patched
 )
 
 # If the pattern wasn't found the file is already patched or layout changed — skip
