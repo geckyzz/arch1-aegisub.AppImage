@@ -510,7 +510,30 @@ discordRPC.updatePresence(presence)
 
 function update_rpc(subs, sel, act)
     local line_info = ""
-    if subs and act then
+    local is_blank_untitled = false
+    
+    local filename = aegisub.file_name()
+    local is_untitled = (filename == "" or filename == "Untitled" or string.match(filename, "^Untitled"))
+    
+    if is_untitled then
+        local has_changes = false
+        local dialogue_count = 0
+        for i = 1, #subs do
+            if subs[i].class == "dialogue" then
+                dialogue_count = dialogue_count + 1
+                local line = subs[i]
+                if dialogue_count > 1 or line.text ~= "" or line.start_time ~= 0 or line.end_time ~= 0 then
+                    has_changes = true
+                    break
+                end
+            end
+        end
+        if not has_changes then
+            is_blank_untitled = true
+        end
+    end
+
+    if not is_blank_untitled and subs and act then
         local active_line_obj = subs[act]
         if active_line_obj and active_line_obj.class == "dialogue" and not active_line_obj.comment then
             local line_number = 0
@@ -538,7 +561,7 @@ function update_rpc(subs, sel, act)
 
     presence = {
         state = "Active editing session",
-        details = (line_info ~= "") and line_info or "Editing subtitle",
+        details = (line_info ~= "") and line_info or (is_blank_untitled and "Idle" or "Editing subtitle"),
         startTimestamp = now,
         largeImageKey = "aegisub",
         smallImageKey = "",

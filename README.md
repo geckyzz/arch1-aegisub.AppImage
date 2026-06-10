@@ -80,8 +80,14 @@ solutions during the build:
     lookup fails.
   - Privacy Patch: Replaces the default behavior of broadcasting your subtitle's
     video filename and directory path. The rich presence instead broadcasts a
-    generic `"Active editing session"`, exposing only the current active line
-    index and frame number (e.g., `"Line: 42 | Frame: 1008"`).
+    generic `"Active editing session"`, exposing the current active line's grid
+    index, start timestamp, and frame number
+    e.g., `"Line: 42 | 0:01:23.45 | Frame: 1008"`).
+  - Event Hooking: Automatically updates your Discord status on every editor event
+    (line selection, text input, video seek) by leveraging the macro validation
+    handler.
+  - Untitled Idle State: Displays `"Idle"` instead of active subtitle editing
+    details if the file is a blank new untitled project.
 
 - **linuxdeploy GTK plugin (AppRun & hooks)**
   - Patches `GIO_MODULE_DIR=""` to prevent segmentation faults caused by loading
