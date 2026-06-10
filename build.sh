@@ -26,7 +26,9 @@ INSTALL_DIR="$BUILD_DIR/install"
 APPDIR="$BUILD_DIR/AppDir"
 TOOLS_DIR="$BUILD_DIR/tools"
 ARCH="$(uname -m)"   # x86_64 or aarch64
-VERSION="migration03-02"
+# Calculate CRC32 of this build script to ensure unique build metadata
+SCRIPT_CRC=$(python3 -c "import zlib; print(f'{zlib.crc32(open(\"${BASH_SOURCE[0]}\", \"rb\").read()) & 0xffffffff:08x}')")
+VERSION="3.4.1-arch1t3cht-migration03-02+geckyzz.appimage.build.${SCRIPT_CRC}"
 OUTPUT_NAME="Aegisub-${VERSION}-${ARCH}.AppImage"
 CACHE_DIR="$BUILD_DIR/cache"
 EXTRA_DICTS=()

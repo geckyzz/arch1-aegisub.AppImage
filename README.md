@@ -30,8 +30,9 @@ chmod +x build.sh
 ./build.sh
 ```
 
-The final AppImage will be output as `Aegisub-migration03-02-x86_64.AppImage`
-(or appropriate architecture) in the current directory.
+The final AppImage will be output in the current directory with a unique,
+versioned filename. For example:
+`Aegisub-3.4.1-arch1t3cht-migration03-02+appimage.build.52383d99-x86_64.AppImage`
 
 ## Command Line Options
 
