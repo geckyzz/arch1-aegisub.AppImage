@@ -825,6 +825,9 @@ package() {
         "libxcb-*"
         "libX11.so*"
         "libX11-xcb.so*"
+        "libngtcp2.so*"
+        "libngtcp2_*"
+        "libnghttp3.so*"
     )
     for lib in "${blacklist[@]}"; do
         find "$APPDIR/usr/lib" -name "$lib" -delete -print 2>/dev/null || true
