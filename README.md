@@ -90,8 +90,15 @@ solutions during the build:
     Wayland rendering and use the user's host GTK themes.
   - Merges the AppImage GSettings schema directories with the host schemas (`GSETTINGS_SCHEMA_DIR`).
 
+- **Library Blacklisting (Conflict Prevention)**
+  - Automatically blacklists and deletes `libngtcp2` and `libnghttp3` from
+    the AppImage's internal libraries. This prevents version and symbol mismatch
+    errors (such as `undefined symbol: ngtcp2_conn_get_stream_user_data`) when
+    Aegisub automation scripts (like `libDownloadManager.so`) load and link
+    against the host system's `libcurl`.
+
 - **LuaJIT**
-  - Compiles LuaJIT from source with `LUAJIT_ENABLE_LUA52COMPAT` enabled.\
+  - Compiles LuaJIT from source with `LUAJIT_ENABLE_LUA52COMPAT` enabled.
     Fedora's stock LuaJIT package does not compile this, which breaks automation
     scripts relying on Lua 5.2 features.
 
