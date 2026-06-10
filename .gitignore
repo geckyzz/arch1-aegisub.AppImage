@@ -1,3 +1,5 @@
+*.AppImage
+
 # Prerequisites
 *.d
 
